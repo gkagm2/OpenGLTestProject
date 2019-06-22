@@ -16,6 +16,7 @@ int main() {
 	glutCreateWindow("OpenGL Drawing Example");
 	
 	glutDisplayFunc(MyDisplay);
+
 	glutMainLoop(); 
 	return 0;
 }
