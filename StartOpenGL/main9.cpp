@@ -4,15 +4,22 @@
 GLfloat Delta = 0.0;
 void MyDisplay() {
 	glClear(GL_COLOR_BUFFER_BIT);
+
 	glBegin(GL_POLYGON);
-	//TODO:: this
+	glColor3f(0.0, 0.5, 0.8);
+	glVertex3f(-1.0 + Delta, -0.5, 0.0);
+	glVertex3f(0.0 + Delta, -0.5, 0.0);
+	glVertex3f(0.0 + Delta, 0.5, 0.0);
+	glVertex3f(-1.0 + Delta, 0.5, 0.0);
 	glEnd();
 	glutSwapBuffers();
 }
 
 
-void MyTime(int Value) {
-
+void MyTimer(int Value) {
+	Delta = Delta + 0.001;
+	glutPostRedisplay();
+	glutTimerFunc(40, MyTimer, 1);
 }
 void InitSetting(int argc, char **argv) {
 	glutInit(&argc, argv);
@@ -30,6 +37,7 @@ int main(int argc, char **argv) {
 	InitSetting(argc, argv);
 	
 	glutDisplayFunc(MyDisplay);
+	glutTimerFunc(40, MyTimer, 1); //Timer callback function
 	glutMainLoop();
 
 	return 0;
