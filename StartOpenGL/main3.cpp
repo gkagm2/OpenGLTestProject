@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include <GL/glut.h>
 //#include <GL/GLU.h>
 //#include <GL/GL.h>
@@ -13,10 +14,27 @@ void MyDisplay() {
 	glVertex3f(0.5, 0.5, 0.5);
 	glVertex3f(-0.5, 0.5, 0.0);
 
+=======
+// 리셰이프 콜백
+
+#include <GL/glut.h>
+
+void MyDisplay() {
+	glClear(GL_COLOR_BUFFER_BIT);	//컬러 버퍼에 초기화 색을 가함
+	glColor3f(0.5, 0.5, 0.5);		//회색
+
+	glBegin(GL_POLYGON);			//사각형
+
+	glVertex3f(-0.5, -0.5, 0.0);	//좌하단 좌표
+	glVertex3f(0.5, -0.5, 0.0);		//우하단 좌표
+	glVertex3f(0.5, 0.5, 0.0);		//우상단 좌표
+	glVertex3f(-0.5, 0.5, 0.0);		//좌상단 좌표
+>>>>>>> b08a57fbf969ea64c780cf563d373758c3a3af75
 	glEnd();
 	glFlush();
 }
 
+<<<<<<< HEAD
 int main(int argc, char **argv) {
 
 	// 윈도우 초기화
@@ -40,3 +58,29 @@ int main(int argc, char **argv) {
 
 	
 }
+=======
+void MyReshape(int NewWidth, int NewHeight) {
+	glViewport(0, 0, NewWidth, NewHeight);
+	GLfloat WidthFactor = (GLfloat)NewWidth / (GLfloat)300;
+	GLfloat HeightFactor = (GLfloat)NewHeight / (GLfloat)300;
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(-1.0 * WidthFactor, 1.0 * WidthFactor, -1.0 * HeightFactor, 1.0* HeightFactor, -1.0, 1.0);
+}
+
+int main(int argc, char **argv) {
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_RGB);
+	glutInitWindowSize(300, 300);
+	glutInitWindowPosition(0, 0);
+	glutCreateWindow("OpenGL Example Drawing");
+
+	glClearColor(1.0, 1.0, 1.0, 1.0); //  초기화 색은 백색
+
+	glutDisplayFunc(MyDisplay);
+	glutMainLoop();
+
+	return 0;
+}
+
+>>>>>>> b08a57fbf969ea64c780cf563d373758c3a3af75
