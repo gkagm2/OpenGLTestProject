@@ -28,7 +28,10 @@ void MyDisplay() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
+	gluLookAt(
+		0.0, 0.0, 0.0,		// eye x, y, z
+		0.0, 0.0, -1.0,		// center x, y, z
+		0.0, 1.0, 0.0);		// up x, y, z
 	glutSolidTeapot(0.5);
 	glFlush();
 }
