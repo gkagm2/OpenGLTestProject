@@ -2,6 +2,7 @@
 #include <mmsystem.h>
 #include <GL/glut.h>
 #include <math.h>
+#include <iostream>
 
 static double time = 0;
 static double time2 = 0;
@@ -313,6 +314,10 @@ void DrawAndroid() {
 	DrawR_foot(R_Leg_y, 1, 0, 0); // 오른쪽 발
 }
 
+/*
+로봇이 달리는 것을 표현한 함수. 로봇의 관절 움직임을 표현했고, 로봇이 달리면서 상, 하, 좌, 우로 움직이는 모습을 표현함.
+기본적인 로봇 움직임의 가속도는  sin() 함수를 통해 표현하였으며, 관절 움직임의 제한 범위를 생각하여 abs()함수를 통해 관절의 움직임을 제한함.
+*/
 void Run() {
 	// TODO : 사운드 헤더 문제
 	sndPlaySound(TEXT("C:\\sample1.wav"), SND_ASYNC | SND_NOSTOP);
@@ -350,9 +355,91 @@ void Run() {
 // 로봇이 잽을 날리는 동작을 표현한 함수
 void Jap() {
 	sndPlaySound(TEXT("C:\\"), SND_ASYNC | SND_NOSTOP);
-	// TODO : 여기서 부터 해야 함.
+	glLoadIdentity();
+	L_Arm_x = (-40) + sin(time2) * 60; // 왼쪽 어깨의 각도 시작은 -40 상태에서 sin()함수로 주기적인 움직임 설정
+	R_Arm_x = (-80) - L_Arm_x; // 오른쪽 어깨의 각도 시작은 -80 상태에서 왼쪽 어깨 움직임의 반대로 설정
+	R_Arm_y = -abs(cos(time2) * 80); // 오른 팔 각도 조절. 팔을 뻗는 움직임 표현을 위해 어꺠의 sin() 함수와 반대인 cos() 함수 사용
+	L_Arm_y = -abs(-cos(time2) * 80); // 왼팔 각도 조절
+	R_Leg_y = abs(-sin(time) * 30 - 20); // 오른쪽 종아리 각도 조절(절닷값을 사용해 앞으로 꺾이지 않게)
+	L_Leg_y = abs(sin(time) * 30 - 20); // 왼쪽 종아리 각도 조절
+	R_Leg_x = sin(time) * 30; // 오른쪽 다리는 30도까지. sin() 함수로 주기적인 움직임 설정
+	L_Leg_x = -R_Leg_x; // 왼쪽 다리는 오른쪽 다리 반대로
+
+	cyl = gluNewQuadric(); // 실린더 객체 생성
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 초기화
+	glMatrixMode(GL_MODELVIEW); // 모드 설정
+	
+	DrawGround(); // 지면을 그림
+	glLoadIdentity(); // CTM 초기화
+	glRotatef(-230.0, 0, 1, 0); // y축을 기준으로 회전
+	glRotatef(sin(time) * 10, 0, 0, 1); // 로봇의 좌우 반동 표현 (좌우로 10도만큼 주기적인 움직임 설정)
+	std::cout << "-> sin(time) : " << sin(time) << std::endl;
+	
+
+	// 로봇이 잽을 날리면서 상하로 움직이는 것을 표현
+	float j = 0;
+	j = abs(sin(time2) * 0.085); // j 값 설정
+	glPushMatrix(); // 최초 저장 좌표계 다시 저장
+	glTranslatef(0.0, j, 0); // 변수 j만큼 로봇의 몸체가 y축을 기준으로 움직임
+	glTranslatef(0.0, 0.5, 0.0); // 최초 위치
+	DrawAndroid();
+	glutSwapBuffers();
 }
 
+// 로봇이 퇴장할 때 크기 변환을 표현한 함수
+void ex() {
+	sndPlaySound(TEXT("C:\\"), SND_ASYNC | SND_NOSTOP);
+	glLoadIdentity(); // CTM 초기화
+
+	L_Arm_x = (-40) + sin(time2) * 60;
+	R_Arm_x = (-80) - L_Arm_x;
+	R_Arm_y = -abs(cos(time2) * 10);
+	L_Arm_y = -abs(-cos(time2) * 10);
+	R_Leg_y = abs(-sin(time) * 30 - 30);
+	L_Leg_y = abs(sin(time) * 30 - 30);
+	R_Leg_x = sin(time) * 60;
+	L_Leg_x = -R_Leg_x;
+
+	cyl = gluNewQuadric(); // 실린더 객체 생성
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 초기화
+	glMatrixMode(GL_MODELVIEW); // 모드 설정
+
+	glLoadIdentity(); // CTM을 초기화
+	glRotatef(-180, 0, 1, 0); // y축을 기준으로 회전
+	glRotatef(time6, 0, 0, 1); // time6 변수만큼 z축을 기준으로 회전
+	glScalef(0.4 / (sin(time3)), 0.4 / (sin(time3)), 0.4 / (sin(time3))); // 0.4의 크기에서 sin()을 사용하여 크기 조절을 주기적으로 가함
+	glPushMatrix(); // 최초 저장 좌표계 다시 저장
+	glTranslatef(0.0, 0.5, 0.0); // 최초 위치
+	DrawAndroid();
+	glutSwapBuffers();
+}
+
+// 스케이팅 동작을 표현한 함수
+void Show() {
+	sndPlaySound(TEXT("C:\\"), SND_ASYNC | SND_NOSTOP);
+	glLoadIdentity();
+	L_Arm_x = (-40) + sin(time2) * 60;
+	R_Arm_x = (-80) - L_Arm_x;
+	R_Arm_y = -abs(cos(time2) * 10);
+	L_Arm_y = -abs(-cos(time2) * 10);
+	R_Leg_y = abs(-sin(time) * 30 - 30);
+	L_Leg_y = abs(sin(time) * 30 - 30);
+	R_Leg_x = sin(time) * 60;
+	L_Leg_x = -R_Leg_x;
+
+	cyl = gluNewQuadric();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+
+	DrawGround();
+	glLoadIdentity();
+	glRotatef(-230.0, 0, 1, 0);
+
+	// 몸통. 로봇의 피겨 동작 시 몸이 틀어지는 것을 표현
+	glRotatef(sin(time) * 7, 0, 0, 1); // z축을 기준으로 7도까지 틀어짐. sin(S)함수로 주지적인 움직임 설정
+	glRotatef(sin(time) * 7, 0, 1, 0);
+	// TODO : 여기부터 해야 함.
+}
 
 
 
