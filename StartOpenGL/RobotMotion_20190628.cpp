@@ -313,6 +313,45 @@ void DrawAndroid() {
 	DrawR_foot(R_Leg_y, 1, 0, 0); // 오른쪽 발
 }
 
+void Run() {
+	// TODO : 사운드 헤더 문제
+	sndPlaySound(TEXT("C:\\sample1.wav"), SND_ASYNC | SND_NOSTOP);
+	glLoadIdentity(); // CTM 초기화
+	L_Arm_x = sin(time) * 80; // 왼팔은 80도까지 움직이되 sin()으로 주기적인 움직임 설정
+	R_Arm_y = -abs(sin(time) * 60 + 50); // 오른팔 각도 조절 (절댓값을 줌으로써 팔이 뒤로 꺾이지 않음.)
+	L_Arm_y = -abs(-sin(time) * 60 + 50); // 왼팔 각도 조절
+	R_Leg_y = abs(sin(time) * 30 - 30); // 오른쪽 종아리 각도 조절
+	L_Leg_y = abs(sin(time) * 30 - 30); // 왼쪽 종아리 각도 조절
+	R_Leg_x = sin(time) * 60; // 오른쪽 다리는 60도까지 움직이되 sin()으로 주기적인 움직임 설정
+	L_Leg_x = -R_Leg_x; // 왼쪽 다리는 오른쪽 다리 반대로
+
+	cyl = gluNewQuadric(); // 실리더 객체 생성
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 초기화
+	glMatrixMode(GL_MODELVIEW); // 모드 설정
+
+	DrawGround(); // 지면을 그림
+	glLoadIdentity(); // CTM 초기화
+
+	// 로봇이 달리면서 앞, 뒤로 뒤뚱거리고 몸이 틀어지는 것을 표현
+	glRotatef(-230.0, 0, 1, 0);
+	glRotatef(abs(sin(time) * 16), 1, 0, 0); // x축을 기준으로 16도까지 각도가 틀어짐.
+	glRotatef(sin(time) * 16, 0, 1, 0); // y축을 기준으로 16도까지 각도가 틀어짐, sin() 함수로 주기적인 움직임 설정
+
+	// 로봇이 달리면서 상하로 움직이는 것을 표현
+	float i = 0;
+	i = abs(sin(time) * 0.08); // i 변수 값 설정
+	glPushMatrix(); // 최초 저장 좌표계 다시 저장
+	glTranslatef(0.0, i, 0); // 로봇의 몸체가 y축 방향으로 변수 i만큼 이동
+	glTranslatef(0.0, 0.5, 0.0); // 로봇의 최초 위치
+	DrawAndroid();
+	glutSwapBuffers();
+}
+
+// 로봇이 잽을 날리는 동작을 표현한 함수
+void Jap() {
+	sndPlaySound(TEXT("C:\\"), SND_ASYNC | SND_NOSTOP);
+	// TODO : 여기서 부터 해야 함.
+}
 
 
 
