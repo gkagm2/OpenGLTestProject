@@ -323,6 +323,7 @@ void Run() {
 	//sndPlaySound(TEXT("N:\\Project\\OpenGLProjects\\startOpenGL20190619\\StartOpenGL\\a.wav"), SND_ASYNC | SND_NOSTOP);
 	glLoadIdentity(); // CTM 초기화
 	L_Arm_x = sin(time) * 80; // 왼팔은 80도까지 움직이되 sin()으로 주기적인 움직임 설정
+	std::cout << "L_Arm_x--> : " << abs(sin(time)) << ", " << time << std::endl;
 	R_Arm_y = -abs(sin(time) * 60 + 50); // 오른팔 각도 조절 (절댓값을 줌으로써 팔이 뒤로 꺾이지 않음.)
 	L_Arm_y = -abs(-sin(time) * 60 + 50); // 왼팔 각도 조절
 	R_Leg_y = abs(sin(time) * 30 - 30); // 오른쪽 종아리 각도 조절
@@ -381,7 +382,7 @@ void Jap() {
 	j = abs(sin(time2) * 0.085); // j 값 설정
 	glPushMatrix(); // 최초 저장 좌표계 다시 저장
 	glTranslatef(0.0, j, 0); // 변수 j만큼 로봇의 몸체가 y축을 기준으로 움직임
-	glTranslatef(0.0, 0.5, 0.0); // 최초 위치
+	glTranslatef(0.0, 0.5, 0.0); // 최초 위치 q
 	DrawAndroid();
 	glutSwapBuffers();
 }
