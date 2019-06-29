@@ -320,7 +320,7 @@ void DrawAndroid() {
 */
 void Run() {
 	// TODO : 사운드 헤더 문제
-	sndPlaySound(TEXT("C:\\sample1.wav"), SND_ASYNC | SND_NOSTOP);
+	//sndPlaySound(TEXT("N:\\Project\\OpenGLProjects\\startOpenGL20190619\\StartOpenGL\\a.wav"), SND_ASYNC | SND_NOSTOP);
 	glLoadIdentity(); // CTM 초기화
 	L_Arm_x = sin(time) * 80; // 왼팔은 80도까지 움직이되 sin()으로 주기적인 움직임 설정
 	R_Arm_y = -abs(sin(time) * 60 + 50); // 오른팔 각도 조절 (절댓값을 줌으로써 팔이 뒤로 꺾이지 않음.)
@@ -354,7 +354,7 @@ void Run() {
 
 // 로봇이 잽을 날리는 동작을 표현한 함수
 void Jap() {
-	sndPlaySound(TEXT("C:\\"), SND_ASYNC | SND_NOSTOP);
+	//sndPlaySound(TEXT("N:\\Project\\OpenGLProjects\\startOpenGL20190619\\StartOpenGL\\a.wav"), SND_ASYNC | SND_NOSTOP);
 	glLoadIdentity();
 	L_Arm_x = (-40) + sin(time2) * 60; // 왼쪽 어깨의 각도 시작은 -40 상태에서 sin()함수로 주기적인 움직임 설정
 	R_Arm_x = (-80) - L_Arm_x; // 오른쪽 어깨의 각도 시작은 -80 상태에서 왼쪽 어깨 움직임의 반대로 설정
@@ -388,7 +388,7 @@ void Jap() {
 
 // 로봇이 퇴장할 때 크기 변환을 표현한 함수
 void ex() {
-	sndPlaySound(TEXT("C:\\"), SND_ASYNC | SND_NOSTOP);
+	//sndPlaySound(TEXT("N:\\Project\\OpenGLProjects\\startOpenGL20190619\\StartOpenGL\\a.wav"), SND_ASYNC | SND_NOSTOP);
 	glLoadIdentity(); // CTM 초기화
 
 	L_Arm_x = (-40) + sin(time2) * 60;
@@ -416,7 +416,7 @@ void ex() {
 
 // 스케이팅 동작을 표현한 함수
 void Show() {
-	sndPlaySound(TEXT("C:\\"), SND_ASYNC | SND_NOSTOP);
+	//sndPlaySound(TEXT("N:\\Project\\OpenGLProjects\\startOpenGL20190619\\StartOpenGL\\a.wav"), SND_ASYNC | SND_NOSTOP);
 	glLoadIdentity();
 	L_Arm_x = (-40) + sin(time2) * 60;
 	R_Arm_x = (-80) - L_Arm_x;
@@ -438,13 +438,178 @@ void Show() {
 	// 몸통. 로봇의 피겨 동작 시 몸이 틀어지는 것을 표현
 	glRotatef(sin(time) * 7, 0, 0, 1); // z축을 기준으로 7도까지 틀어짐. sin(S)함수로 주지적인 움직임 설정
 	glRotatef(sin(time) * 7, 0, 1, 0);
-	// TODO : 여기부터 해야 함.
+	glTranslatef(0.0, 0.18, 0.0); // y축 방향으로 이동
+	glRotatef(80, 1, 0, 0); // x 축을 기준으로 회전
+	glTranslatef(0.0, 0.5, 0.0); // 최초 위치
+	glPushMatrix(); // 최초 위치 저장
+	DrawBody(0, 0, 0, 0); // 몸통 그리기
+	glPopMatrix(); // 최초 위치 좌표계로 되돌아감.
+	glPushMatrix(); // 최초 위치 좌표계 다시 저장
+
+
+	// 목
+	DrawNeck(); // 목 그리기
+	glPopMatrix(); // 최초 위치 좌표ㅛ계로 되돌아감
+	glPushMatrix(); // 최초 위치 좌표계 다시 저장
+
+	// 머리
+	glRotatef(-75, 1, 0, 0); // x 축을 기준으로 회전( 머리를 위쪽으로 돌리기)
+	glTranslatef(0.0, -0.02, 0.0); // y 축 방향으로 이동(머리 시작점)
+	DrawHead(); // 머리를 그림
+	glPopMatrix(); // 최초 저장 좌표계로 되돌아감.
+	glPushMatrix(); // 최초 위치 좌표계 다시 저장
+
+	// 오른팔과 오른손
+	DrawR_Arm((R_Arm_y + 30), 1, 0, 0); // 오른팔을 그림
+	DrawR_Hand(-(R_Arm_y - 15), 1, 0, 0); // 오른손을 그림.
+	glPopMatrix(); // 최초 저장 좌표계로 되돌아감.
+	glPushMatrix(); // 최초 위치 좌표계 다시 저장.
+
+	// 왼팔과 왼손
+	glRotatef(40, 0, 0, 1); // z축을 기준으로 회전
+	DrawL_Arm((L_Arm_y + 30), 1, 0, 0); // 왼팔을 그림.
+	DrawL_Hand(-(L_Arm_y - 15), 1, 0, 0); // 왼손을 그림
+	glPopMatrix(); // 최초 저장 좌표계로 되돌아감.
+	glPushMatrix(); // 최초 위치 좌표계 다시 저장
+
+	// 왼쪽 다리와 왼쪽 종아리
+	glTranslatef(0.0, -0.45, -0.25); // y축, z축으로 이동(왼쪽 다리 시작점)
+	glRotatef(-90, 1, 0, 0); // x축을 기준으로 회전
+	DrawL_Legs(-30, 1, 0, 0); // 왼쪽 다리
+	DrawL_foot(10, 1, 0, 0); // 왼쪽 종아리
+	glPopMatrix(); // 최초 저장 좌표계로 되돌아감
+	glPushMatrix(); // 최초 위치 좌표계 다시 저장
+
+	// 오른쪽 다리와 오른쪽 종아리
+	glTranslatef(0,-0.5, -0.5); // y축, z축으로 이동(오른쪽 다리 시작점)
+	glRotatef(-90, 1, 0, 0); // x축을 기준으로 회전
+	DrawR_Legs(160, 1, 0, 0); //  오른쪽 다리
+	DrawR_foot(R_Leg_y, 1, 0, 0); // 오른쪽 종아리
+	glPopMatrix(); // 최초 저장 좌표계로 되돌아감.
+	glutSwapBuffers(); // 더블 버퍼링
+
 }
 
 
+// 로봇이 로켓을 발사하는 모습을 표현한 함수
+void Rocket() {
+	//sndPlaySound(TEXT("N:\\Project\\OpenGLProjects\\startOpenGL20190619\\StartOpenGL\\a.wav"), SND_ASYNC | SND_NOSTOP);
+	glLoadIdentity();
+	L_Arm_x = -90; // 90도 각도로 팔을 앞으로 내밈.
+	R_Arm_x = -90;
+	R = 2 * abs(-sin(time2) * 0.2) - 0.2;
 
+	// 오른쪽 로켓 움직임 설정. 절댓값을 사용해 로켓이 앞쪽으로 나가게 설정.
+	// +0.2를 통해 로켓의 최초 위치 조절. 2*를 통해 로켓이 나가는 거리 조절.
+	// sin() 함수로 주기적인 움직임 설정
+
+	R2 = 2 * abs(sin(time2) * 0.2 - 0.2) + 0.2; // 왼쪽 로켓 움직임 설정
+	R_Leg_y = abs(-sin(time) * 30 - 30); // 왼쪽 종아리 각도 조절
+	L_Leg_y = abs(sin(time) * 30 - 30); // 왼쪽 종아리 각도 조절
+	R_Leg_x = sin(time) * 60;
+	L_Leg_x = -R_Leg_x;
+
+	cyl = gluNewQuadric(); // 실린더 객체 생성
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 초기화
+	glMatrixMode(GL_MODELVIEW); // 모드 설정
+
+	DrawGround(); // 지면을 그림
+	glLoadIdentity();
+	glPushMatrix();
+	glRotatef(-230.0, 0, 1, 0);
+
+	// 로켓을 쏠 때 상하좌우로 몸을 트는 모습을 설정
+	glRotatef(-abs(sin(time) * 8), 1, 0, 0); // x축을 기준으로 8도까지 틀어짐
+	glRotatef(sin(time) * 7, 0, 0, 1); // z축을 기준으로 7도까지 틀어짐
+	// 로켓을 쏘며 몸을 튕기는 모습을 표현
+	float i = 0;
+	i = abs(sin(time) * 0.08);
+	glTranslatef(0.0, i, 0);
+	glTranslatef(0.0, 0.5, 0.0);
+	DrawAndroid();
+	glutSwapBuffers();
+		
+}
+
+// 키보드 콜백, w를 누르면 wireframe모드로, s를 누르면  solid rendering모드로, q를 누르면 종료
+void MyKeyboard(unsigned char KeyPressed, int x, int y) {
+	switch (KeyPressed) {
+	case 'w':
+		flag = 1;
+		break;
+	case 's':
+		flag = 0;
+		break;
+	case 'q':
+		key = 6;
+		break;
+	}
+}
+
+// 장면별로 키 값이 부여되며 이에 따라 노래가 연주됨. 노래 재생은 sndPlaySound() 함수를 사용하였으며
+// 이를 위해 별도의 음악 파일이 필요함. 경로 설정은 sndPlaySound(TEXT("음악 파일 경로"))
+void MyDisplay() {
+	if (key == RUN) { // 달릴 때
+		Run();
+		glPopMatrix();
+	}
+	else if (key == JAP) { // 잽을 날릴 때
+		Jap();
+		glPopMatrix();
+	}
+	else if (key == ROCKET) { // 로켓을 발사할 때
+		Rocket();
+		glPopMatrix();
+	}
+	else if (key == YUNA) { // 파겨 동작을 취할 때
+		Show();
+		glPopMatrix();
+	}
+	else if (key == 5) { // 중지가 선택되었을 때
+		//sndPlaySound(NULL, SND_ASYNC);
+	}
+	else if (key == EXIT) { // 종료가 선택되었을 때
+		ex();
+		glPopMatrix();
+	}
+}
+
+// 타이머 함수. 각 장면마다 상태 표현을 다르게 하기 위해 별도의 시간 변수를 사용함.
+void MyTimer(int Value) {
+	time = time + 0.1; // 달릴 떄 쓰인 타이머 변수
+	time2 = time2 + 0.5; // 잽을 날릴 때 쓰인 타이머 변수
+	time3 = time3 + 0.01; // 로켓을 발사할 때 쓰인 타이머 변수
+						  // 종료 시 로봇이 뱅글뱅글 돌아가게 하는 데 쓰인 타이머 변수
+	time4 = time4 + 1.0; // 피겨 동작을 취할 때 쓰인 타이머 변수
+	glutPostRedisplay();
+	glutTimerFunc(40, MyTimer, 1);
+ }
+
+
+
+// 마우스 오른쪽 클릭으로 메뉴를 선택할 때 실행되는 함수. 기본적으로 마우스 콜백을 이용해 장면이 변환 되도록 설정
+void MyMainMenu(int entryID) {
+	key = entryID;
+}
 
 int main(int argc, char **argv) {
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+	glutInitWindowSize(800, 800);
+	glutInitWindowPosition(0, 0);
+	glutCreateWindow("Catch Me If You Can");
+	glInit();
+	GLint MyMainMenuId = glutCreateMenu(MyMainMenu);
+	glutAddMenuEntry("Run", 1);
+	glutAddMenuEntry("Jap", 2);
+	glutAddMenuEntry("Shoot", 3);
+	glutAddMenuEntry("Skate", 4);
+	glutAddMenuEntry("중지", 5);
 
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
+	glutKeyboardFunc(MyKeyboard);
+	glutTimerFunc(40, MyTimer, 1);
+	glutDisplayFunc(MyDisplay);
+	glutMainLoop();
 	return 0;
 }
