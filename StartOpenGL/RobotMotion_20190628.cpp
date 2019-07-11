@@ -1,10 +1,12 @@
+// ·Îº¿ ¸ð¼Ç.
+
 #include <Windows.h>
 #include <mmsystem.h>
 #include <GL/glut.h>
 #include <math.h>
 #include <iostream>
 
-static double time = 0;
+static double time = 0;	
 static double time2 = 0;
 static double time3 = 0;
 static double time4 = 0;
