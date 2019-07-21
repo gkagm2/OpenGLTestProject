@@ -21,6 +21,9 @@ namespace SagacityEngine {
 		int height;
 	public:
 		GLfloat x, y, z;
+		GLfloat screenX, screenY;
+		
+
 		GLController(const GLfloat x = 0, const GLfloat y = 0, const GLfloat z = 0) {
 			this->x = x;
 			this->y = y;
@@ -33,7 +36,6 @@ namespace SagacityEngine {
 
 
 		void SetPosition(const GLfloat x, const GLfloat y, const GLfloat z);
-		void Debug_Log();
 		void GLInit();
 		void ShowScreen();
 		void SetWindowSize(int width, int height);
@@ -41,16 +43,50 @@ namespace SagacityEngine {
 		int GetHeight();
 		void MakeCube();
 		void MakeRect();
+		void MakePanel(const float x, const float y, const float width, const float heigth);
+
+		void CallError(const char *message);
+		void Debug(const char *message);
+		void ChangeNormalizationToScreenCoordinate(float x, float y, float width, float heigth);
+		
 	};
 
+
 	//// FUNCTION
-	void GLController::Debug_Log() {
-#ifdef DEFINE_STDIO_H
-		printf("error!");
-#elif DEFINE_IOSTREAM
-		std::cout << "error!";
-#endif
+
+	void GLController::CallError(const char *message) {
+#ifdef DEFINE_IOSTREAM
+		std::cout << "error !" << message << std::endl;
+#elif DEFINE_STDIO_H
+		printf(" error 1! %s\n", message);
+#endif	
 	}
+	void GLController::Debug(const char *message) {
+#ifdef DEFINE_IOSTREAM
+		std::cout << "Debug : "<< message << std::endl;
+#elif DEFINE_STDIO_H
+		printf("Debug : %s\n", message);
+#endif	
+	}
+	
+
+	void GLController::MakePanel(const float x, const float y, const float width, const float height) {
+		// TODO : rgb 배열의 index가 늘거나 줄면 큰일남. 예외처리 해야 함
+		
+		printf("%f %f %f %f \n", x, y, width, height);
+
+		glViewport(GetWidth() / 2, 0, GetWidth() / 2, GetHeight());
+
+		glBegin(GL_POLYGON);
+		
+		// make panel
+		glVertex3f(x, y, 0);
+		glVertex3f(x + width, y, 0);
+		glVertex3f(x + width, y + height, 0);
+		glVertex3f(x, y + height, 0);
+		glEnd();
+	}
+
 
 	void GLController::SetPosition(const GLfloat x, const GLfloat y, const GLfloat z) {
 
@@ -85,14 +121,43 @@ namespace SagacityEngine {
 		glVertex3f(-.5, .5, 0);
 		glEnd();
 	}
+
+	void GLController::ChangeNormalizationToScreenCoordinate(float x, float y, float width, float height) {
+
+		// change normalization coordinate to screen coordinate 
+		screenX = width * (0.5 - (-1.0)) / 2.0;
+		screenY = height * (0.5 - (-1.0)) / -2.0;
+	}
 	
 }
-
 
 
 using namespace SagacityEngine;
 GLController controller;
 
+
+// view screen
+void ViewScreen() {
+	glColor3f(0.2, 0.2, 0.2);
+	//
+	glViewport(0, 0, controller.GetWidth()/2, controller.GetHeight()/2);
+	printf("widht :  %d, height : %d\n", controller.GetWidth(), controller.GetHeight()/2);
+	//
+
+	controller.MakeRect();
+
+	printf("Display 호출\n");
+}
+
+// project panel
+void ProjectScreen() {
+
+	glColor3f(0.1, 1.0, 0.1);
+	glViewport(controller.GetWidth() / 2, 0, controller.GetWidth() / 2, controller.GetHeight());
+	controller.MakePanel(controller.GetWidth() / 2, 0, controller.GetWidth() / 2, controller.GetHeight()/2);
+	controller.MakeRect();
+	printf("ProjectPanel 호출\n");
+}
 
 
 
@@ -102,14 +167,9 @@ GLController controller;
 
 void MyDisplay() {
 	glClear(GL_COLOR_BUFFER_BIT);
-	//
-	glViewport(0, 0, controller.GetWidth(), controller.GetHeight());
-	printf("widht :  %d, height : %d\n", controller.GetWidth(), controller.GetHeight());
-	//
 
-	controller.MakeRect();
-
-	printf("Display 호출\n");
+	ViewScreen(); // 3d view screen
+	ProjectScreen(); // project Screen
 	glFlush();
 }
 
@@ -133,7 +193,6 @@ void MyReshape(int width, int height) {
 int main() {
 
 
-	controller.Debug_Log();
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("Game"); // 새로운 윈도우 생성
 	controller.GLInit();
