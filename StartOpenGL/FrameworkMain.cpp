@@ -15,7 +15,11 @@
 #include "GL/glut.h"
 
 namespace SagacityEngine {
-	class GLController {
+	class ScreenController {
+
+	};
+
+	class GLController : public ScreenController {
 	private:
 		int width;
 		int height;
@@ -42,7 +46,7 @@ namespace SagacityEngine {
 		int GetWidth();
 		int GetHeight();
 		void MakeCube();
-		void MakeRect();
+		void MakeRect(float size);
 		void MakePanel(const float x, const float y, const float width, const float heigth);
 
 		void CallError(const char *message);
@@ -68,6 +72,7 @@ namespace SagacityEngine {
 		printf("Debug : %s\n", message);
 #endif	
 	}
+
 	
 
 	void GLController::MakePanel(const float x, const float y, const float width, const float height) {
@@ -113,12 +118,16 @@ namespace SagacityEngine {
 	void GLController::MakeCube() {
 		glutSolidCube(5.0);
 	}
-	void GLController::MakeRect() {
+	void GLController::MakeRect(float size) {
+		if (size <= 0 || size > 1) {
+			CallError(" 사각형 사이즈는 0에서 1까지만 가능합니다.");
+			return;
+		}
 		glBegin(GL_POLYGON);
-		glVertex3f(-.5, -.5, 0);
-		glVertex3f(.5, -.5, 0);
-		glVertex3f(.5, .5, 0);
-		glVertex3f(-.5, .5, 0);
+		glVertex3f(-size, -size, 0);
+		glVertex3f(size, -size, 0);
+		glVertex3f(size, size, 0);
+		glVertex3f(-size, size, 0);
 		glEnd();
 	}
 
@@ -144,7 +153,7 @@ void ViewScreen() {
 	printf("widht :  %d, height : %d\n", controller.GetWidth(), controller.GetHeight()/2);
 	//
 
-	controller.MakeRect();
+	controller.MakeRect(1); // size 1
 
 	printf("Display 호출\n");
 }
@@ -155,7 +164,7 @@ void ProjectScreen() {
 	glColor3f(0.1, 1.0, 0.1);
 	glViewport(controller.GetWidth() / 2, 0, controller.GetWidth() / 2, controller.GetHeight());
 	controller.MakePanel(controller.GetWidth() / 2, 0, controller.GetWidth() / 2, controller.GetHeight()/2);
-	controller.MakeRect();
+	controller.MakeRect(1); //size 1
 	printf("ProjectPanel 호출\n");
 }
 
@@ -188,15 +197,29 @@ void MyIdle() {
 void MyReshape(int width, int height) {
 	printf("width : %d, height : %d\n", width, height);
 	controller.SetWindowSize(width, height);
+
+	glViewport(0, 0, width, height);
+	GLfloat widthFactor = (GLfloat)width / (GLfloat)1280;
+	GLfloat heightFactor = (GLfloat)height / (GLfloat)720;
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	glOrtho(-1.0 * widthFactor, 1.0 * widthFactor, -1.0 * heightFactor, 1.0 * heightFactor, -1.0, 1.0);
+	
+
 }
 
-int main() {
+int main(int argc, char **argv) {
+
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_RGB);
 
 
+	glutInitWindowSize(1280, 720);
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("Game"); // 새로운 윈도우 생성
 	controller.GLInit();
-	glClearColor(0.5, 0.5, 0.5, 1.0);
+	glClearColor(0.5, 0.5, 0.5, 1.0); // init color
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
