@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include "GL/glut.h"
 
-namespace SagacityEngine {
+namespace SagacityEngine {	
 	class ScreenController {
 
 	};
@@ -52,11 +52,24 @@ namespace SagacityEngine {
 		void CallError(const char *message);
 		void Debug(const char *message);
 		void ChangeNormalizationToScreenCoordinate(float x, float y, float width, float heigth);
+
+		void ResizeWindow(int width, int height); // resize window
 		
 	};
 
 
 	//// FUNCTION
+
+	void GLController::ResizeWindow(int width, int height) {
+		
+		glViewport(0, 0, width, height);
+		GLfloat widthFactor = (GLfloat)width / (GLfloat)1280;
+		GLfloat heightFactor = (GLfloat)height / (GLfloat)720;
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+
+		glOrtho(-1.0 * widthFactor, 1.0 * widthFactor, -1.0 * heightFactor, 1.0 * heightFactor, -1.0, 1.0);
+	}
 
 	void GLController::CallError(const char *message) {
 #ifdef DEFINE_IOSTREAM
@@ -183,30 +196,58 @@ void MyDisplay() {
 }
 
 void MyKeyboard(unsigned char key, GLint x, GLint y) {
+	printf("[MyKeyboard] x : %d, y : %d\n", x, y);
+	switch (key) {
+	case 'q': 
+	case 'Q':
+	case 27: // esc or q 
+		exit(1); // exit program
+		break;
+		
+
+	}
 
 }
 
 void MyMouse(GLint button, GLint state, GLint x, GLint y) {
-
+	printf("[MyMouse] button : %d, state : %d, x : %d, y : %d\n", button, state, x, y);
 }
 
 
+// IDLE
 void MyIdle() {
 }
 
+
+// 재생성
 void MyReshape(int width, int height) {
 	printf("width : %d, height : %d\n", width, height);
 	controller.SetWindowSize(width, height);
 
-	glViewport(0, 0, width, height);
-	GLfloat widthFactor = (GLfloat)width / (GLfloat)1280;
-	GLfloat heightFactor = (GLfloat)height / (GLfloat)720;
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	glOrtho(-1.0 * widthFactor, 1.0 * widthFactor, -1.0 * heightFactor, 1.0 * heightFactor, -1.0, 1.0);
+	controller.ResizeWindow(width, height);
+	
 	
 
+}
+
+// 특수 문자 입력 시 
+void MySpecial(int key, int x, int y) {
+	printf("[MySpecial] x : %d, y : %d\n", x, y);
+	switch (key) {
+	case GLUT_KEY_UP:
+		controller.Debug("press key up");
+		break;
+	case GLUT_KEY_DOWN:
+		controller.Debug("press key down");
+		break;
+	case GLUT_KEY_LEFT:
+		controller.Debug("press key left");
+		break;
+	case GLUT_KEY_RIGHT:
+		controller.Debug("press key right");
+		break;
+			
+	}
 }
 
 int main(int argc, char **argv) {
@@ -225,11 +266,15 @@ int main(int argc, char **argv) {
 	glLoadIdentity();
 	glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
 	//
-	glutDisplayFunc(MyDisplay);
-	glutKeyboardFunc(MyKeyboard);
-	glutMouseFunc(MyMouse);
-	glutIdleFunc(MyIdle);
-	glutReshapeFunc(MyReshape);
+	glutDisplayFunc(MyDisplay); //display
+	glutKeyboardFunc(MyKeyboard); // char key
+	glutSpecialFunc(MySpecial); // special key
+
+
+	glutMouseFunc(MyMouse); // mouse
+	glutIdleFunc(MyIdle); // idle
+	glutReshapeFunc(MyReshape); // reshape
+
 	//
 
 	glutMainLoop();
