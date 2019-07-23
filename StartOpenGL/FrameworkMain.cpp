@@ -250,6 +250,24 @@ void MySpecial(int key, int x, int y) {
 	}
 }
 
+// 마우스를 누른 상태에서 움직일 때
+void MyMotion(int x, int y) {
+	printf("마우스 누를 때 %d, %d \n", x, y);
+}
+
+// 아무런 버튼도 누르지 않은 상태에서 움직일 때
+void MyPassiveMotion(int x, int y) {
+	printf("아무것도 누르지 않은 상태에서 마우스를 움직이는 좌표%d, %d\n", x, y);
+}
+
+// 마우스가 윈도우 안으로 들어오거나 밖으로 나갈 때
+void MyEntry(int state) {
+	printf("state : %d\n", state);
+
+}
+
+
+
 int main(int argc, char **argv) {
 
 	glutInit(&argc, argv);
@@ -265,15 +283,27 @@ int main(int argc, char **argv) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
-	//
+
+	// Display
 	glutDisplayFunc(MyDisplay); //display
+
+	// Keyboard
 	glutKeyboardFunc(MyKeyboard); // char key
 	glutSpecialFunc(MySpecial); // special key
 
-
+	// Mouse
 	glutMouseFunc(MyMouse); // mouse
+	glutMotionFunc(MyMotion); // mouse 누른 상태에서 움직일 때 
+	glutPassiveMotionFunc(MyPassiveMotion); // 아무런 버튼도 누르지 않은 상태에서 마우스를 움직이는 것
+	glutEntryFunc(MyEntry);
+
+
 	glutIdleFunc(MyIdle); // idle
 	glutReshapeFunc(MyReshape); // reshape
+
+	
+
+
 
 	//
 
