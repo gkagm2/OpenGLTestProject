@@ -15,6 +15,12 @@
 #include "GL/glut.h"
 
 namespace SagacityEngine {	
+	enum Mode {
+		Mode_DrawSphere_E,
+		Mode_DrawBox_E
+	};
+
+
 	class ScreenController {
 
 	};
@@ -23,9 +29,15 @@ namespace SagacityEngine {
 	private:
 		int width;
 		int height;
+
+		
+
 	public:
 		GLfloat x, y, z;
 		GLfloat screenX, screenY;
+
+		
+		Mode menuMode;
 		
 
 		GLController(const GLfloat x = 0, const GLfloat y = 0, const GLfloat z = 0) {
@@ -35,7 +47,7 @@ namespace SagacityEngine {
 
 			width = 0;
 			height = 0;
-		}
+		};
 
 
 
@@ -266,7 +278,25 @@ void MyEntry(int state) {
 
 }
 
+void MyMainMenu(int entryID) {
+	if (entryID == 1) { // sphere
+		controller.menuMode = Mode_DrawSphere_E;
+		printf("main menu1 -=> entryid 1\n");
+	}
+	else if (entryID == 2) { // box
+		controller.menuMode = Mode_DrawBox_E;
+		printf("main menu1 -=> entryid 2\n");
+	}
+}
 
+void MyMainMenu2(int entryID) {
+	if (entryID == 1) {
+		printf("main menu2 -=> entryid 1\n");
+	}
+	else if (entryID == 2) {
+		printf("main menu2 -=> entryid 2\n");
+	}
+}
 
 int main(int argc, char **argv) {
 
@@ -296,6 +326,21 @@ int main(int argc, char **argv) {
 	glutMotionFunc(MyMotion); // mouse 누른 상태에서 움직일 때 
 	glutPassiveMotionFunc(MyPassiveMotion); // 아무런 버튼도 누르지 않은 상태에서 마우스를 움직이는 것
 	glutEntryFunc(MyEntry);
+
+	// Menu 1
+	GLint MyMainMenuID = glutCreateMenu(MyMainMenu);
+	glutAddMenuEntry("Draw Sphere", 1);
+	glutAddMenuEntry("Draw Box", 2);
+	glutAttachMenu(GLUT_MIDDLE_BUTTON); // 오른쪽 버튼을 눌렀을 경우
+	// Menu 2
+	GLint MyMainMenuID2 = glutCreateMenu(MyMainMenu2);
+	glutAddMenuEntry("Menu1", 1);
+	glutAddMenuEntry("Menu2", 2);
+	glutAttachMenu(GLUT_RIGHT_BUTTON); // 오른쪽 버튼을 눌렀을 경우
+	
+
+
+
 
 
 	glutIdleFunc(MyIdle); // idle
