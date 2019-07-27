@@ -19,7 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main9.cpp" />
+    <ClCompile Include="Engine\GLController.cpp" />
+    <ClCompile Include="Engine\MyEngineMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Engine\GLController.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
