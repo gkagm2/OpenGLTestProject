@@ -1,8 +1,1 @@
-<<<<<<< HEAD
-﻿  GLController.cpp
-  MyEngineMain.cpp
-  코드를 생성하고 있습니다...
-  StartOpenGL.vcxproj -> N:\Project\OpenGLProjects\startOpenGL20190619\StartOpenGL\Debug\StartOpenGL.exe
-=======
-﻿  StartOpenGL.vcxproj -> C:\Users\pc\Desktop\opengl\OpenGL_Project\StartOpenGL\Debug\StartOpenGL.exe
->>>>>>> 1ed0f64eb67e16ab05734f2b7b0fbe30cffe0dc5
+﻿N:\Project\OpenGLProjects\startOpenGL20190619\StartOpenGL\StartOpenGL.vcxproj(22,2): error MSB4025: 프로젝트 파일을 로드할 수 없습니다. 이름은 '<' 문자, 16진수 값 0x3C(으)로 시작할 수 없습니다. 줄 22, 위치 2
