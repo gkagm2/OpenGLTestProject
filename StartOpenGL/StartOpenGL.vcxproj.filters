@@ -15,15 +15,26 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <ClCompile Include="Engine\GLController.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Engine\MyEngineMain.cpp">
+=======
+    <ClCompile Include="Jang\GLController.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Jang\MyEngineMain.cpp">
+>>>>>>> 1ed0f64eb67e16ab05734f2b7b0fbe30cffe0dc5
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <ClInclude Include="Engine\GLController.h">
+=======
+    <ClInclude Include="Jang\GLController.h">
+>>>>>>> 1ed0f64eb67e16ab05734f2b7b0fbe30cffe0dc5
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

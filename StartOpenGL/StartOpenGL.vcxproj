@@ -19,18 +19,26 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <ClCompile Include="Engine\GLController.cpp" />
     <ClCompile Include="Engine\MyEngineMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GLController.h" />
+=======
+    <ClCompile Include="Jang\GLController.cpp" />
+    <ClCompile Include="Jang\MyEngineMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Jang\GLController.h" />
+>>>>>>> 1ed0f64eb67e16ab05734f2b7b0fbe30cffe0dc5
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{0C746DBC-5953-44BD-B0D7-39EF65D5AE72}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>StartOpenGL</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
